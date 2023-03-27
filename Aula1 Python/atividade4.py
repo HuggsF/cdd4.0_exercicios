@@ -8,10 +8,10 @@ operacao = int(input("Qual Operação deseja fazer? \n"
                      "4 - divisao"))
 if operacao == 1:
     calculo = numero1 + numero2
-    print("O resultado da sua soma é",calculo)
+    print("O resultado da sua soma é ",calculo)
 elif operacao == 2:
     calculo = numero1 - numero2
-    print("O resultado da sua subtração é:", calculo)
+    print("O resultado da sua subtração é: ", calculo)
 elif operacao == 3:
     calculo = numero1 * numero2
     print("O resultado da sua multiplicação é: ", calculo)
@@ -19,4 +19,4 @@ elif operacao == 4:
     calculo = numero1 / numero2
     print("O resultado da sua divisao é: ", calculo)
 else:
-    "Escolha um número de 1 a 4"
+    "Escolha um número de 1 a 4!"
