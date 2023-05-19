@@ -19,14 +19,13 @@ font_rb = pg.font.SysFont('Courier New', 30)
 
 pg.display.set_caption("Jogo da Forca - by HuggsF")
 
-end_game = True
 
-chance = 0
-
-palavras = ['Poltrona','Desenvolvedor','Fruta','Pão','Vidraça']
-letras_ja_tentadas = [' ', '-']
+palavras = ["POLTRONA","DESENVOLVEDOR","FRUTA","VIDRAÇA","CACHORRO","VIDA","PARALELEPIPEDO","CRAVO","MONTANHA","ROSA"]
+tentativas_de_letras = [' ', '-']
 palavra_escolhida = ''
 palavra_camuflada = ''
+end_game = True
+chance = 0
 letra = ''
 click_last_status = False
 
@@ -60,25 +59,38 @@ def sortear_palavra(palavras,palavra_escolhida,end_game):
         end_game = False
     return palavra_escolhida, end_game
 
-def camuflando_palavra(palavra_escolhida,palavra_camuflada,letras_ja_tentadas):
+def camuflando_palavra(palavra_escolhida,palavra_camuflada,tentativas_de_letras):
     palavra_camuflada = palavra_escolhida
     for n in range(len(palavra_camuflada)):
-        if palavra_camuflada[n:n + 1] not in letras_ja_tentadas:
+        if palavra_camuflada[n:n + 1] not in tentativas_de_letras:
             palavra_camuflada = palavra_camuflada.replace(palavra_camuflada[n], "#")
     return palavra_camuflada
 
-def tentando_uma_letra(letras_ja_tentadas,palavra_escolhida,letra,chance):
-    if letra not in letras_ja_tentadas:
-        letras_ja_tentadas.append(letra)
+def tentando_uma_letra(tentativas_de_letras,palavra_escolhida,letra,chance):
+    if letra not in tentativas_de_letras:
+        tentativas_de_letras.append(letra)
         if letra not in palavra_escolhida:
             chance +=1
-    elif letra in letras_ja_tentadas:
+    elif letra in tentativas_de_letras:
         pass
-    return letras_ja_tentadas, chance
+    return tentativas_de_letras, chance
 
 def palavra_do_jogo(window,palavra_camuflada):
     palavra = font.render(palavra_camuflada, True, BRANCO)
     window.blit(palavra,(200, 500))
+def restart_do_jogo(palavra_camuflada, end_game,chance,letra,tentativas_de_letras,click_last_status,click,x,y):
+    cont = 0
+    limite = len(palavra_camuflada)
+    for n in range(len(palavra_camuflada)):
+        if palavra_camuflada[n] != "#":
+            cont += 1
+    if cont == limite and click_last_status == False and click[0] == True:
+        if x>= 700 and x <= 900 and y >= 100 and y <= 165:
+            tentativas_de_letras = [' ', '-']
+            end_game = True
+            chance = 0
+            letra = ' '
+    return end_game, chance, tentativas_de_letras, letra
                      
 while True:
     
@@ -89,20 +101,35 @@ while True:
         if event.type == pg.KEYDOWN:
             letra = str(pg.key.name(event.key)).upper()
             print(letra)
-    #jogo
+    # Mouse
+    mouse = pg.mouse.get_pos()
+    mouse_position_x = mouse[0]
+    mouse_position_y = mouse[1]
+    
+    #clique do mouse
+    click = pg.mouse.get_pressed()
+    # Jogo
     desenho_da_forca(window,chance)
     desenho_restart_button(window)
     palavra_escolhida, end_game = sortear_palavra(palavras,palavra_escolhida,end_game)        
-    palavra_camuflada = camuflando_palavra(palavra_escolhida,palavra_camuflada,letras_ja_tentadas)
-    letras_ja_tentadas, chance = palavra_do_jogo(window,palavra_camuflada)
+    palavra_camuflada = camuflando_palavra(palavra_escolhida,palavra_camuflada,tentativas_de_letras)
+    tentativas_de_letras, chance = tentando_uma_letra(tentativas_de_letras,palavra_escolhida,letra,chance)
+    end_game, chance, tentativas_de_letras, letra = restart_do_jogo(palavra_camuflada, end_game,chance,letra,tentativas_de_letras,click_last_status,click,mouse_position_x,mouse_position_y)
     palavra_do_jogo(window,palavra_camuflada)
+    
+    #Click Last Status
+    if click[0] == True:
+        click_last_status = True
+    else:
+        click_last_status = False
+    
     pg.display.update()
 
     # print(f'{estado_atual}')
 
     # letra = str(input('Digite uma letra.'))
 
-    # letras_ja_tentadas.append(letra)
+    # tentativas_de_letras.append(letra)
     
 
     # if letra in jogo_da_forca.lower():
