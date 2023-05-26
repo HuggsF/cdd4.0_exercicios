@@ -1,7 +1,7 @@
 ## jogo da forca
 import random
 
-palavras_aleatorias = ["Poltrona","Desenvolvedor","Fruta","Pão","Vidraça"]
+palavras_aleatorias = ["Poltrona","Desenvolvedor","Fruta","Pão","Vidraça","Cachorro","Vida","Paralelepipedo","Cravo","Montanha"]
 
 letras_ja_tentadas = []
 
